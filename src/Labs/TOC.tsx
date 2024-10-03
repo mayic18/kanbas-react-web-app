@@ -40,6 +40,11 @@ export default function TOC() {
           My GitHub
         </a>
       </li>
+      <li className="nav-item">
+        <a id="wd-github" href="https://github.com/mayic18/kanbas-react-web-app.git" className="nav-link">
+          Yicheng Ma GitHub
+        </a>
+      </li>
     </ul>
   );
 }
