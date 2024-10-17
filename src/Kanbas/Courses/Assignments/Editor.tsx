@@ -1,9 +1,17 @@
+
+import { useParams, Link } from 'react-router-dom';
+import * as db from '../../Database';
+
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams(); 
+  const assignment = db.assignments.find((a) => a._id === aid);
+  const course = db.courses.find((c) => c._id === cid);
+
   return (
     <div id="wd-container" className="wd-main-content-offset ">
       <h2>Assignment</h2>
       <div className="row mb-4 me-3">
-        <input className="form-control" style={{ borderColor: '#ccc', borderRadius: '8px', padding: '10px',  marginRight: '30px' }} id="wd-name" value="A1 - ENV + HTML" />
+        <input className="form-control" style={{ borderColor: '#ccc', borderRadius: '8px', padding: '10px',  marginRight: '30px' }} id="wd-name" value={assignment?._id} />
       </div>
       <div className="row">
       </div>
@@ -131,7 +139,7 @@ export default function AssignmentEditor() {
            </div>
 
            <div className="row mb-3">
-             <input className="custom-date-input" type="date" id="wd-due-date" name="due" value="2024-05-13" />
+             <input className="custom-date-input" type="date" id="wd-due-date" name="due" value={course?.endDate} />
            </div>
 
            <div className="row">
@@ -145,7 +153,7 @@ export default function AssignmentEditor() {
 
            <div className="row mb-3">
             <div className="col-s-3 col-md-6 col-l-12">
-              <input className="custom-date-input" type="date" id="wd-available-from" name="from" value="2024-05-26" />
+              <input className="custom-date-input" type="date" id="wd-available-from" name="from" value={course?.startDate} />
             </div>
             <div className="col-md-6">
               <input className="custom-date-input" type="date" id="wd-available-until" name="until" value="2024-05-28" />            </div>
@@ -155,13 +163,16 @@ export default function AssignmentEditor() {
             <div className="col-md-8">
             </div>
             <div className="col-md-2">
-            <button className="form-control" id="wd-name" >Cancel</button>
+              <Link to={`/Kanbas/Courses/${cid}/Assignments`} className="btn btn-secondary w-100" id="wd-name">
+                Cancel
+              </Link>
             </div>
             <div className="col-md-2">
-            <button className="btn btn-danger w-100 mb-2">Save</button>
+              <Link to={`/Kanbas/Courses/${cid}/Assignments`} className="btn btn-danger w-100 mb-2">
+                Save
+              </Link>
             </div>
-          </div>
-          
+          </div>   
 
         </div>
       </div>
