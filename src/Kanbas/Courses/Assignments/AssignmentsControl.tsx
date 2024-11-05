@@ -1,7 +1,22 @@
+
+
 import { FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import { FaSearch } from 'react-icons/fa';
+import { useNavigate, useParams } from "react-router-dom";
+import * as db from "../../Database";
+import { addAssignment } from "./reducer";
+
+
+
 export default function AssignmentsControl() {
+    const navigate = useNavigate();
+    const { cid } = useParams();
+    
+    const handleAddAssignment = () => {
+      navigate(`/Kanbas/Courses/${cid}/AssignmentEditor`); 
+  };
+
     return (
         <div id="wd-assignments-controls" className="d-flex flex-wrap-nowrap text-nowrap justify-content-end">
 
@@ -14,6 +29,7 @@ export default function AssignmentsControl() {
                 className="form-control"
                 placeholder="Search"
                 aria-label="Search"
+                
                />   
             </div>
             <div id="wd-collapse-all" className="text-nowrap">
@@ -22,9 +38,9 @@ export default function AssignmentsControl() {
                     Group</button>
             </div>
 
-            <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end">
+            <button onClick={handleAddAssignment} type="button" id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end">
                 <FaPlus className="position-relative me-2" style={{ bottom: "1px" }} />
                 Assignment</button>
         </div>
     );
-}
+} 
