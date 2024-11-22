@@ -1,15 +1,17 @@
 import { Link } from "react-router-dom";
-import * as db from "./Database";
+
 import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './store';
 import { enrollInCourse, unenrollFromCourse } from './Enrollments/reducer';
+import * as enrollmentsClient from './Enrollments/clients'
 
 export default function Dashboard({ courses, course, setCourse, addNewCourse,
   deleteCourse, updateCourse }: {
-  courses: any[]; course: any; setCourse: (course: any) => void;
-  addNewCourse: () => void; deleteCourse: (course: any) => void;
-  updateCourse: () => void; }) {
+    courses: any[]; course: any; setCourse: (course: any) => void;
+    addNewCourse: () => void; deleteCourse: (course: any) => void;
+    updateCourse: () => void;
+  }) {
   const dispatch = useDispatch();
   const { role, enrollments } = useSelector((state: RootState) => state.user.user);
   const [showAllCourses, setShowAllCourses] = useState(false);
@@ -18,15 +20,16 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
   const handleEnroll = (courseId: string) => {
     dispatch(enrollInCourse(courseId));
   };
-
-  const handleUnenroll = (courseId: string) => {
-    dispatch(unenrollFromCourse(courseId));
+  const removeEnrollment = async (userId: string, courseId: string) => {
+    await enrollmentsClient.deleteEnrollment(userId, courseId);
+    dispatch((unenrollFromCourse({ courseId })));
   };
-  const displayedCourses = role === 'FACULTY' 
-  ? courses 
-  : showAllCourses 
-    ? courses 
-    : courses.filter(course => isEnrolled(course._id));
+
+  const addErollments = async (userId: string, courseId: string) => {
+    await enrollmentsClient.addEnrollment(userId, courseId);
+    dispatch((enrollInCourse({ courseId })));
+  };
+  const displayedCourses = courses;
 
   return (
     <div id="wd-dashboard">
@@ -52,7 +55,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
           {showAllCourses ? "View Enrolled Courses" : "View All Courses"}
         </button>
       )}
-      
+
 
       <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
       <div id="wd-dashboard-courses" className="row">
@@ -61,7 +64,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
             <div className="wd-dashboard-course col" style={{ width: "300px" }}>
               <div className="card rounded-3 overflow-hidden">
                 <Link to={`/Kanbas/Courses/${course._id}/Home`}
-                      className="wd-dashboard-course-link text-decoration-none text-dark" >
+                  className="wd-dashboard-course-link text-decoration-none text-dark" >
                   <img src="/images/reactjs.jpg" width="100%" height={160} />
                   <div className="card-body">
                     <h5 className="wd-dashboard-course-title card-title">
@@ -72,14 +75,15 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
                     {(role === 'STUDENT' || role === 'FACULTY') && (
                       <button className="btn btn-primary"> Go </button>
                     )}
-                    
+
                     {role === 'STUDENT' && (
                       isEnrolled(course._id) ? (
-                        <button className="btn btn-danger float-end" onClick={(e) => { e.preventDefault(); handleUnenroll(course._id); }}>
+                        <button className="btn btn-danger float-end" onClick={async (e) => {
+                          e.preventDefault(); await removeEnrollment;}}>
                           Unenroll
                         </button>
                       ) : (
-                        <button className="btn btn-success float-end" onClick={(e) => { e.preventDefault(); handleEnroll(course._id); }}>
+                        <button className="btn btn-success float-end" onClick={async (e) => { e.preventDefault(); await addErollments; }}>
                           Enroll
                         </button>
                       )
@@ -89,13 +93,13 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
                         <button onClick={(event) => {
                           event.preventDefault();
                           deleteCourse(course._id);
-                          }} className="btn btn-danger float-end"
+                        }} className="btn btn-danger float-end"
                           id="wd-delete-course-click">
                           Delete
                         </button>
                         <button id="wd-edit-course-click"
                           onClick={(event) => {
-                          event.preventDefault();
+                            event.preventDefault();
                             setCourse(course);
                           }}
                           className="btn btn-warning me-2 float-end" >
@@ -103,7 +107,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
                         </button>
                       </>
                     )}
-                    
+
 
 
                   </div>
@@ -114,4 +118,5 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
         </div>
       </div>
     </div>
-);}
+  );
+}
