@@ -117,7 +117,7 @@ export default function Assignments() {
             <h4>Are you sure you want to delete this assignment?</h4>
             
               <button
-                onClick={() => removeAssignments}
+                onClick={confirmDelete}
                 className="btn btn-danger me-2">
                 Yes
               </button>
