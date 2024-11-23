@@ -62,6 +62,11 @@ export default function TOC() {
           Yicheng Ma Node-Sever
         </a>
       </li>
+      <li className="nav-item">
+        <a id="wd-github" href="https://kanbas-node-server-app-gvfj.onrender.com" className="nav-link">
+           Render
+        </a>
+      </li>
     </ul>
   );
 }
