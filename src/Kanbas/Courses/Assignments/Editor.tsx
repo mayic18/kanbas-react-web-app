@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAssignment, addAssignment, updateAssignment } from "./reducer";
+import { addAssignment, updateAssignment } from "./reducer";
 import { RootState } from "../../store";
 import { Assignment } from "./types";
-import * as assignmentsClient from "./client";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
@@ -22,19 +21,6 @@ export default function AssignmentEditor() {
     availableUntil: "",
   });
 
-  const removeAssignment = async (assignment : {_id : string}) => {
-    await assignmentsClient.deleteAssignment(assignment._id);
-    dispatch(deleteAssignment(assignment));
-  }; 
-
-  const createAssignmentForCourse = async () => {
-    if (!cid) return;
-    const newAssignment = { course: cid, assignment: aid };
-    const assignments = await assignmentsClient.createAssignment(cid, newAssignment);
-    dispatch(addAssignment({ ...formData, course: cid || "", _id: new Date().getTime().toString() } as Assignment));
-    navigate(`/Kanbas/Courses/${cid}/Assignments`);
-  };
-  
   useEffect(() => {
     if (aid && assignments.length > 0) {
       const existingAssignment = assignments.find(
@@ -152,7 +138,7 @@ export default function AssignmentEditor() {
           <button onClick={handleCancel} className="btn btn-secondary w-100">Cancel</button>
         </div>
         <div className="col-md-2">
-          <button onClick={createAssignmentForCourse} className="btn btn-danger w-100">Save</button>
+          <button onClick={handleSave} className="btn btn-danger w-100">Save</button>
         </div>
       </div>
       

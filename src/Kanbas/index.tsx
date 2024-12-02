@@ -12,49 +12,26 @@ import ProtectedCourseRoute from "./Account/ProtectedCourseRoute";
 import { RootState } from './store';
 import * as userClient from "./Account/client";
 import Session from "./Account/Session";
-import * as courseClient from "./Courses/client";
+import * as coursesClient from "./client"
 export default function Kanbas() {
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [courses, setCourses] = useState<any[]>([]);
   const [course, setCourse] = useState<any>({
     _id: "1234", name: "New Course", number: "New Number",
     startDate: "2023-09-10", endDate: "2023-12-15", description: "New Description",
   });
 
-
-
-  const addNewCourse = async () => {
-    const newCourse = await userClient.createCourse(course);
-    setCourses([ ...courses, newCourse ]);
-  };
-
-  const deleteCourse = async  (courseId: any) => {
-    const status = await courseClient.deleteCourse(courseId);
-    setCourses(courses.filter((course) => course._id !== courseId));
-  };
-  const updateCourse = async  () => {
-    await courseClient.updateCourse(course);
-    setCourses(
-      courses.map((c) => {
-        if (c._id === course._id) {
-          return course;
-        } else {
-          return c;
-        }
-      })
-    );
-  };
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const fetchCourses = async () => {
-    let courses = [];
+  const [allCourses, setAllCourses] = useState<any[]>([]);
+  const fetchAllCoursesFunc = async () => {
     try {
-      courses = await userClient.findMyCourses();
+      const courses = await coursesClient.fetchAllCourses();
+      setAllCourses(courses);
     } catch (error) {
       console.error(error);
     }
-    setCourses(courses);
-  };
+  }
   useEffect(() => {
-    fetchCourses();
+    fetchAllCoursesFunc();
   }, [currentUser]);
   
   return (
@@ -65,20 +42,13 @@ export default function Kanbas() {
         <Routes>
           <Route path="/" element={<Navigate to="Account" />} />
           <Route path="/Account/*" element={<Account />} />
-          <Route path="/Dashboard" element={<ProtectedRoute><Dashboard
-              courses={courses}
-              course={course}
-              setCourse={setCourse}
-              addNewCourse={addNewCourse}
-              deleteCourse={deleteCourse}
-              updateCourse={updateCourse}/></ProtectedRoute>} />
-          <Route path="/Courses/:cid/*" element={<ProtectedCourseRoute><Courses  courses={courses}/></ProtectedCourseRoute>} />
+          <Route path="/Dashboard" element={<ProtectedRoute><Dashboard course={course} setCourse={setCourse} allCourses={allCourses}/>
+            </ProtectedRoute>} />
+          <Route path="/Courses/:cid/*" element={<ProtectedRoute><Courses courses={allCourses} /></ProtectedRoute>} />
           <Route path="/Calendar" element={<h1>Calendar</h1>} />
           <Route path="/Inbox" element={<h1>Inbox</h1>} />
         </Routes>
       </div>
     </div>
     </Session>
-  );
-}
-  
+  );}

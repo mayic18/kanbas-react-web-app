@@ -1,5 +1,5 @@
 [{
-    "_id": "123",
+    "userId": "123",
     "username": "iron_man",
     "password": "stark123",
     "firstName": "Tony",
@@ -13,7 +13,7 @@
     "totalActivity": "10:21:32"
   },
   {
-    "_id": "234",
+    "userId": "234",
     "username": "dark_knight",
     "password": "wayne123",
     "firstName": "Bruce",
@@ -27,7 +27,7 @@
     "totalActivity": "15:32:43"
   },
   {
-    "_id": "345",
+    "userId": "345",
     "username": "black_widow",
     "password": "romanoff123",
     "firstName": "Natasha",
@@ -41,7 +41,7 @@
     "totalActivity": "13:23:34"
   },
   {
-    "_id": "456",
+    "userId": "456",
     "username": "thor_odinson",
     "password": "mjolnir123",
     "firstName": "Thor",
@@ -55,7 +55,7 @@
     "totalActivity": "11:22:33"
   },
   {
-    "_id": "567",
+    "userId": "567",
     "username": "hulk_smash",
     "password": "banner123",
     "firstName": "Bruce",
@@ -69,7 +69,7 @@
     "totalActivity": "22:33:44"
   },
   {
-    "_id": "678",
+    "userId": "678",
     "username": "ring_bearer",
     "password": "shire123",
     "firstName": "Frodo",
@@ -83,7 +83,7 @@
     "totalActivity": "44:33:22"
   },
   {
-    "_id": "789",
+    "userId": "789",
     "username": "strider",
     "password": "aragorn123",
     "firstName": "Aragorn",
@@ -97,7 +97,7 @@
     "totalActivity": "12:23:34"
   },
   {
-    "_id": "890",
+    "userId": "890",
     "username": "elf_archer",
     "password": "legolas123",
     "firstName": "Legolas",
@@ -109,4 +109,18 @@
     "section": "S101",
     "lastActivity": "2020-11-11",
     "totalActivity": "21:32:43"
+  },
+  {
+    "userId": "111",
+    "username": "loganm18",
+    "password": "loganm18",
+    "firstName": "logan",
+    "lastName": "ma",
+    "email": "Ma@avengers.com",
+    "dob": "1984-11-22",
+    "role": "ADMIN",
+    "loginId": "0000000000",
+    "section": "S101",
+    "lastActivity": "2020-11-05",
+    "totalActivity": "13:23:34"
   }]
