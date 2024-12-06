@@ -3,10 +3,11 @@ import { FaUserCircle } from "react-icons/fa";
 //import * as db from "../../Database";
 import PeopleDetails from "./Details";
 import { Link } from "react-router-dom";
-
+import * as courseClient from "../client"
+import { useSelector } from "react-redux";
+import * as userClient from "../"
 export default function PeopleTable({ users = [] }: { users?: any[] }) {
-  //const { cid } = useParams();
-  //const { users, enrollments } = db;
+  
   return (
     <div id="wd-people-table">
       <PeopleDetails />
@@ -15,23 +16,46 @@ export default function PeopleTable({ users = [] }: { users?: any[] }) {
           <tr><th>Name</th><th>Login ID</th><th>Section</th><th>Role</th><th>Last Activity</th><th>Total Activity</th></tr>
         </thead>
         <tbody>
-          {users.map((user, index) => (
-            <tr key={user._id || `user-${index}`}>
-              <td className="wd-full-name text-nowrap">
-                <Link to={`/Kanbas/Account/Users/${user._id}`} className="text-decoration-none">
-                  <FaUserCircle className="me-2 fs-1 text-secondary" />
-                  <span className="wd-first-name">{user.firstName}</span>
-                  <span className="wd-last-name">{user.lastName}</span>
-                </Link>
-              </td>
-              <td className="wd-login-id">{user.loginId}</td>
-              <td className="wd-section">{user.section}</td>
-              <td className="wd-role">{user.role}</td>
-              <td className="wd-last-activity">{user.lastActivity}</td>
-              <td className="wd-total-activity">{user.totalActivity}</td>
-            </tr>
-          ))}
+          {users
+            .map((user: any) => (
+              <tr key={user._id}>
+                <td className="wd-full-name text-nowrap">
+                  <Link to={`/Kanbas/Account/Users/${user._id}`} className="text-decoration-none">
+                    <FaUserCircle className="me-2 fs-1 text-secondary" />
+                    <span className="wd-first-name">{user.firstName}</span>{" "}
+                    <span className="wd-last-name">{user.lastName}</span>
+                  </Link>
+                </td>
+                <td className="wd-login-id">{user.loginId}</td>
+                <td className="wd-section">{user.section}</td>
+                <td className="wd-role">{user.role}</td>
+                <td className="wd-last-activity">{user.lastActivity}</td>
+                <td className="wd-total-activity">{user.totalActivity}</td> </tr>
+            ))}
         </tbody>
       </table>
-    </div>);
-}
+    </div> );}
+  /*const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const fetchUserForCourse = async () => {
+    try {
+      const allUser = await courseClient.findAllUsers();
+      const enrolledUser= await courseClient.findUsersForCourse (
+        currentUser._id
+      );
+      const users = allUser.map((user: any) => {
+        if (enrolledUser.find((c: any) => u._id === userId)) {
+          return { ...user, enrolled: true };
+        } else {
+          return user;
+        }
+      });
+      setUser(users);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    if (enrolling) {
+      fetchUserForCourse();
+    } 
+  }, [currentUser, enrolling]);*/

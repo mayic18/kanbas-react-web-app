@@ -1,150 +1,158 @@
-import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 import { addAssignment, updateAssignment } from "./reducer";
 import { RootState } from "../../store";
-import { Assignment } from "./types";
+import { createAssignment, updateAssignment as updateAssignmentAPI } from "./client"; 
+
+type Assignment = {
+    _id: string;
+    course: string;
+    title: string;
+    description: string;
+    points: number;
+    availableDate: string;
+    dueDate: string;
+    availableUntil: string;
+  };
 
 export default function AssignmentEditor() {
-  const { cid, aid } = useParams();
+  const { cid, aid } = useParams<{ cid: string; aid?: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const assignments = useSelector((state: RootState) => state.assignments.assignments);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+
+  const assignment = useSelector((state: RootState) =>
+    state.assignmentReducer.assignments.find((a : Assignment) => a._id === aid && a.course === cid)
+  );
+
   const [formData, setFormData] = useState({
-    _id: "",
+    _id: aid || new Date().getTime().toString(),
+    course: cid || "",
     title: "",
-    course:"",
     description: "",
     points: 0,
+    availableDate: "",
     dueDate: "",
-    availableFrom: "",
     availableUntil: "",
   });
 
+
   useEffect(() => {
-    if (aid && assignments.length > 0) {
-      const existingAssignment = assignments.find(
-        (assignment) => assignment._id === aid
-      ) as Assignment | undefined; 
-      
-      if (existingAssignment) {
-        setFormData({
-        _id: existingAssignment._id,
-        title: existingAssignment.title || "",
-        course: existingAssignment.course,
-        description: existingAssignment.description || "",
-        points: existingAssignment.points || 0,
-        dueDate: existingAssignment.dueDate || "",
-        availableFrom: existingAssignment.availableFrom || "",
-        availableUntil: existingAssignment.availableUntil || ""}) 
-        }
+    if (assignment) {
+      setFormData(assignment);
     }
-  }, [aid, assignments]);
+  }, [assignment]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
-
-  const handleSave = () => {
-    if (aid) {
-      dispatch(updateAssignment(formData));
+  
+  const handleSave = async () => {
+    if (assignment) {
+      await updateAssignmentAPI(formData);
+      dispatch(updateAssignment(formData))
     } else {
-      dispatch(addAssignment({ ...formData, course: cid || "", _id: new Date().getTime().toString() } as Assignment));
+      await createAssignment(cid as string, formData);
+      dispatch(addAssignment(formData))
     }
     navigate(`/Kanbas/Courses/${cid}/Assignments`);
   };
 
-  const handleCancel = () => {
-    navigate(`/Kanbas/Courses/${cid}/Assignments`);
-  };
+  const isFaculty = currentUser?.role === "FACULTY";
 
   return (
-    <div id="wd-container" className="wd-main-content-offset">
-      <h4>{"New Assignment"}</h4>
-      <div className="row mb-4 me-3">
+    <div id="wd-assignments-editor">
+      <h2>{assignment ? "Edit Assignment" : "New Assignment"}</h2>
+
+      <div className="mb-3">
+        <label htmlFor="title" className="form-label">Assignment Name</label>
         <input
-          className="form-control"
-          style={{ borderColor: '#ccc', borderRadius: '8px', padding: '10px', marginRight: '30px' }}
           id="title"
           value={formData.title}
           onChange={handleChange}
-          placeholder="Assignment Name"
+          className="form-control"
+          readOnly={!isFaculty}
         />
       </div>
 
-      <div className="row mb-4 me-3">
+      <div className="mb-3">
+        <label htmlFor="description" className="form-label">Description</label>
         <textarea
-          className="form-control"
-          style={{ borderColor: '#ccc', borderRadius: '8px', padding: '10px', marginRight: '30px' }}
           id="description"
+          rows={5}
           value={formData.description}
           onChange={handleChange}
-          placeholder="Assignment Description"
-        />
+          className="form-control"
+          readOnly={!isFaculty}
+        ></textarea>
       </div>
 
-      <div className="row mb-3">
-        <label className="col-md-3 text-end" htmlFor="points">Points</label>
-        <div className="col-md-8">
+      <div className="row mb-3 align-items-center">
+        <label htmlFor="points" className="col-sm-2 form-label text-end">Points</label>
+        <div className="col-md-10">
           <input
-            type="number"
-            className="form-control"
             id="points"
+            type="number"
             value={formData.points}
             onChange={handleChange}
+            className="form-control"
+            readOnly={!isFaculty}
           />
         </div>
       </div>
 
       <div className="row mb-3">
-        <label className="mt-2 text-end" htmlFor="dueDate"><b>Due</b></label>
-        <input
-          className="custom-date-input"
-          type="date"
-          id="dueDate"
-          value={formData.dueDate}
-          onChange={handleChange}
-        />
-      </div>
-
-      
-      <div className="row mb-3">
-        <div className="col-md-6">
-          <label htmlFor="availableFrom">Available from</label>
+        <label htmlFor="availableDate" className="col-sm-2 form-label text-end">Available From</label>
+        <div className="col-md-4">
           <input
-            className="custom-date-input"
+            id="availableDate"
             type="date"
-            id="availableFrom"
-            value={formData.availableFrom}
+            value={formData.availableDate}
             onChange={handleChange}
+            className="form-control"
+            readOnly={!isFaculty}
           />
         </div>
-        <div className="col-md-6">
-          <label htmlFor="availableUntil">Until</label>
+        <label htmlFor="dueDate" className="col-sm-2 form-label text-end">Due Date</label>
+        <div className="col-md-4">
           <input
-            className="custom-date-input"
+            id="dueDate"
             type="date"
+            value={formData.dueDate}
+            onChange={handleChange}
+            className="form-control"
+            readOnly={!isFaculty}
+          />
+        </div>
+      </div>
+
+      <div className="row mb-3">
+        <label htmlFor="availableUntil" className="col-sm-2 form-label text-end">Available Until</label>
+        <div className="col-md-4">
+          <input
             id="availableUntil"
+            type="date"
             value={formData.availableUntil}
             onChange={handleChange}
+            className="form-control"
+            readOnly={!isFaculty}
           />
         </div>
+      </div>
 
-        
-        <div className="row mt-3">
-        <div className="col-md-8"></div>
-        <div className="col-md-2">
-          <button onClick={handleCancel} className="btn btn-secondary w-100">Cancel</button>
-        </div>
-        <div className="col-md-2">
-          <button onClick={handleSave} className="btn btn-danger w-100">Save</button>
-        </div>
+      <div className="text-end">
+        {isFaculty && (
+            <button onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments`)} className="btn btn-secondary me-3">Cancel</button>
+        )}
+        {isFaculty && (
+            <button onClick={handleSave} className="btn btn-danger">Save</button>
+        )}    
       </div>
-      
-      </div>
-      
-      
     </div>
   );
 }

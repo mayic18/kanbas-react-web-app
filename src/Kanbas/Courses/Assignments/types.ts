@@ -5,6 +5,7 @@ export interface Assignment {
     description?: string;
     points?: number;
     dueDate?: string;
+    dateAvailable?: string;
     availableFrom?: string;
     availableUntil?: string;
   }
