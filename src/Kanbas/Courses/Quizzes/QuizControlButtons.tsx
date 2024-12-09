@@ -1,6 +1,6 @@
 import { IoEllipsisVertical } from "react-icons/io5";
 import GreenCheckmark from "../Modules/GreenCheckmark";
-import { BsBanFill } from "react-icons/bs";
+import { FaLock } from "react-icons/fa"; 
 import { useDispatch } from "react-redux";
 import { deleteQuiz, publish, unPublish } from "./reducer";
 import * as coursesClient from "../client";
@@ -25,7 +25,7 @@ export default function QuizControlButtons({
         </span>
       )}
       {!quiz.published && (
-        <BsBanFill
+        <FaLock
           className="text-danger me-1 mt-1 fs-5"
           onClick={() => {
             coursesClient.publishQuiz(cid, quiz._id);

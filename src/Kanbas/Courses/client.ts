@@ -47,19 +47,8 @@ export const findUsersForCourse = async (courseId: string) => {
     return data;
    };
    
-   export const publishQuiz = async (courseId: string, quizId: string) => {
-    const response = await axiosWithCredentials.put(
-      `${COURSES_API}/${courseId}/quizzes/${quizId}/publish`
-    );
-    return response.data;
-  }
+   
   
-  export const unpublishQuiz = async (courseId: string, quizId: string) => {
-    const response = await axiosWithCredentials.put(
-      `${COURSES_API}/${courseId}/quizzes/${quizId}/unpublish`
-    );
-    return response.data;
-  }
   export const findQuizzesForCourse = async (courseId: string) => {
     const response = await axiosWithCredentials.get(`${COURSES_API}/${courseId}/quizzes`);
     return response.data;
@@ -87,3 +76,15 @@ export const findUsersForCourse = async (courseId: string) => {
     );
     return response.data;
   };
+  export const publishQuiz = async (courseId: string, quizId: string) => {
+    const response = await axiosWithCredentials.put(
+      `${COURSES_API}/${courseId}/quizzes/${quizId}/publish`
+    );
+    return response.data;
+  }
+  
+  export const unpublishQuiz = async (courseId: string, quizId: string) => {
+    const response = await axiosWithCredentials.put(
+      `${COURSES_API}/${courseId}/quizzes/${quizId}/unpublish`
+    );
+    return response.data;}

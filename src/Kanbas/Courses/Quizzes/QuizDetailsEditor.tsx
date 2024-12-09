@@ -5,12 +5,12 @@ import Editor from "react-simple-wysiwyg";
 
 export default function QuizDetailsEditor({
   handleSubmit,
-  handleSubmitAndPublish,
+  handlePublish,
   quizzes,
   qid,
 }: {
   handleSubmit: (quiz: any) => void;
-  handleSubmitAndPublish: (quiz: any) => void;
+  handlePublish: (quiz: any) => void;
   quizzes: any[];
   qid: string;
 }) {
@@ -287,7 +287,7 @@ export default function QuizDetailsEditor({
         </button>
         <button
           className="btn btn-danger"
-          onClick={() => handleSubmitAndPublish(quiz)}
+          onClick={() => handlePublish(quiz)}
         >
           Save and Publish
         </button>

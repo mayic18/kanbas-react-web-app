@@ -9,7 +9,7 @@ import { RiErrorWarningLine } from "react-icons/ri";
 import { FaPencil } from "react-icons/fa6";
 import DOMPurify from "dompurify";
 import * as quizzesClient from "./client";
-
+import { FaQuestionCircle } from "react-icons/fa"
 export default function QuizPreview() {
   const { cid, qid } = useParams();
   const { quizzes } = useSelector((state: any) => state.quizzesReducer);
@@ -83,7 +83,7 @@ export default function QuizPreview() {
       <ProtectedRouteRole>
         <div
           id="wd-todo-error-message"
-          className="alert alert-danger mt-2 mb-4 border-0"
+          className="text-danger alert alert-danger mt-2 mb-4 border-0"
         >
           <RiErrorWarningLine className="text-danger me-2 fs-5" />
           This is a preview of the published version of the quiz
@@ -130,11 +130,28 @@ export default function QuizPreview() {
             id="wd-quiz-cancel"
             className="btn btn-lg btn-secondary me-1 float-start"
           >
-            <FaPencil className="me-2" />
+            <FaPencil className="me-2 mb_2" />
             Keep Editing This Quiz
           </button>
         </Link>
       </ProtectedRouteRole>
+      <h4>Questions</h4>
+      <div className="mt-2"style={{ display: "flex", flexDirection: "column", alignItems: "stretch" }}>
+        {quiz.questions.map((question: any, index: number) => (
+          <button
+            key={index}
+            id="wd-quiz_question"
+            className="text-danger border-0 bg-transparent py-2 px-3 d-flex align-items-center"
+            style={{
+              textAlign: "left",
+              fontWeight: "bold",
+            }}
+          >
+            <FaQuestionCircle className="me-2" />
+            Question {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

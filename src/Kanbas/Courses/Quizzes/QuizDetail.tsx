@@ -2,54 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as quizzesClient from "./client"; // Ensure this includes getLatestAttemptForQuiz
-import * as coursesClient from "../client"; // If needed
 import { FaPencil } from "react-icons/fa6";
-import { setQuizzes } from "./reducer";
+import {  Attempt, RootState} from "./types"
 
-interface Quiz {
-  _id: string;
-  title: string;
-  quizType: string;
-  points: number;
-  assignmentGroup: string;
-  shuffleAnswers: boolean;
-  timeLimit: number;
-  allowMultipleAttempts: boolean;
-  maxAttempts: number;
-  showCorrectAnswers: boolean;
-  accessCode: string;
-  oneQuestionAtATime: boolean;
-  webcam: boolean;
-  lockQuestions: boolean;
-  dueDate: string | null;
-  availableFrom: string | null;
-  availableUntil: string | null;
-  // Add other quiz properties as needed
-}
-
-interface User {
-  _id: string;
-  role: "STUDENT" | "FACULTY" | "ADMIN";
-}
-
-interface Attempt {
-  lastAttempt: string | number | Date;
-  _id: string;
-  quizId: string;
-  userId: string;
-  attemptCount: number;
-  score: number;
-  completedAt: string;
-}
-
-interface RootState {
-  quizzesReducer: {
-    quizzes: Quiz[];
-  };
-  accountReducer: {
-    currentUser: User | null;
-  };
-}
 
 const QuizDetails: React.FC = () => {
   const { cid, qid } = useParams<{ cid: string; qid: string }>();
@@ -101,31 +56,22 @@ const QuizDetails: React.FC = () => {
 
   useEffect(() => {
     const fetchUserAttempts = async () => {
-      // 检查条件是否满足，避免不必要的请求
-      if (!currentUser || !currentUser._id || !qid || !cid) {
-        setLoadingAttempts(false); // 条件不足时直接停止加载
-        return;
-      }
-  
-      try {
-        // 发起 API 请求获取用户尝试次数
-        const attemptData = await quizzesClient.getUserQuizAttempts(cid, qid);
-        console.log("Attempt Data:", attemptData);
-  
-        // 检查响应数据结构，确保 attemptCount 存在
-        if (attemptData && typeof attemptData.attemptCount === "number") {
+      if (currentUser && currentUser._id && qid && cid) {
+        try {
+          // Fetch the number of attempts the user has made
+          const attemptData = await quizzesClient.getUserQuizAttempts(cid, qid);
+          console.log("Attempt Data:", attemptData);
           setUserAttempts(attemptData.attemptCount);
-        } else {
-          throw new Error("Invalid response structure");
+        } catch (err: any) {
+          console.error("Error fetching user attempts:", err);
+          setError("Failed to fetch your quiz attempts.");
+        } finally {
+          setLoadingAttempts(false);
         }
-      } catch (err: any) {
-        console.error("Error fetching user attempts:", err);
-        setError("Failed to fetch your quiz attempts.");
-      } finally {
-        setLoadingAttempts(false); // 确保无论成功或失败都停止加载状态
+      } else {
+        setLoadingAttempts(false);
       }
     };
-  
 
     const fetchLatestAttempt = async () => {
         console.log("Requesting URL:", `/api/quizzes/${qid}/attempts/latest`);
@@ -134,7 +80,6 @@ const QuizDetails: React.FC = () => {
           const latest = await quizzesClient.getLatestAttemptForQuiz(qid);
           console.log("Latest Attempt:", latest);
           setLatestAttempt(latest);
-          setLoadingAttempts(false); 
         } catch (err: any) {
           console.error("Error fetching latest attempt:", err);
           setLatestAttemptError("Failed to fetch the latest attempt.");
@@ -266,14 +211,14 @@ const QuizDetails: React.FC = () => {
             onClick={handleBeginQuiz}
             disabled={loadingAttempts}
           >
-            {loadingAttempts ? "Loading..." : "Begin Quiz"}
+            {"Begin Quiz"}
           </button>
           <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Review`}>
             <button
               className="btn btn-secondary ms-3"
               disabled={loadingLatestAttempt || !latestAttempt}
             >
-              Review Last Attempt
+              Last Attempt
             </button>
           </Link>
           {error && <div className="text-danger mt-2">{error}</div>}

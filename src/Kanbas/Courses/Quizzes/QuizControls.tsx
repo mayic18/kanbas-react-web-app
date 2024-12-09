@@ -98,12 +98,6 @@ export default function QuizzesControls() {
       >
         Collapse All
       </button>
-      {/* <QuizEditor
-        dialogTitle="Add Quiz"
-        quizName={quizName}
-        setQuizName={setQuizName}
-        addQuiz={addQuiz}
-      /> */}
     </div>
   );
 }

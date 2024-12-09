@@ -35,7 +35,6 @@ export const getUserQuizAttempts = async (courseId: string, quizId: string) => {
  * @returns {Promise<any>} - Confirmation or updated attempt count.
  */
 export const incrementUserQuizAttempt = async (
-  courseId: string,
   quizId: string
 ) => {
   try {

@@ -1,12 +1,8 @@
-import {
-    useParams,
-    useLocation,
-    useNavigate,
-  } from "react-router";
+import {useParams,useLocation,useNavigate,} from "react-router";
   import { Link } from "react-router-dom";
   import { useDispatch, useSelector } from "react-redux";
   import { addQuiz, updateQuiz } from "./reducer";
-  import { useEffect, useState } from "react";
+  import { useState } from "react";
   import ProtectedRouteRole from "../ProtectedRoute/ProtectedRouteRole";
   import { FaPlus } from "react-icons/fa";
   import QuestionEditor from "./QuestionEditor";
@@ -52,7 +48,7 @@ import {
       return quiz._id;
     };
   
-    const handleSubmitAndPublish = async (quiz: any) => {
+    const handlePublish = async (quiz: any) => {
       if (foundQuiz) {
         console.log("Updating Quiz");
         console.log(quiz);
@@ -180,7 +176,7 @@ import {
           {pathname.includes("Details") && (
             <QuizDetailsEditor
               handleSubmit={handleSubmit}
-              handleSubmitAndPublish={handleSubmitAndPublish}
+              handlePublish={handlePublish}
               quizzes={quizzes}
               qid={qid as string}
             />

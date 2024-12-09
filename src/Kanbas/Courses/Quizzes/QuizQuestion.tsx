@@ -2,34 +2,21 @@ import { FaPencil, FaPlus } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import DOMPurify from "isomorphic-dompurify";
 import { useState } from "react";
-
-interface Choice {
-  _id: string;
-  question: string;
-  correct: boolean;
-  answer: string;
-  selected: boolean;
-}
-
-interface QuizAnswerType {
-  _id: string;
-  text: string;
-  selected?: boolean;
-}
+import {Choice, QuizAnswerType} from "./types";
 
 interface QuizQuestion {
-  _id: string;
-  text: string;
-  points: number;
-  answers: QuizAnswerType[];
-  quiz: string;
-  title: string;
-  type: string;
-  question: string;
-  choices: Choice[];
-  edit: boolean;
-  correct: boolean;
-}
+    _id: string;
+    text: string;
+    points: number;
+    answers: QuizAnswerType[];
+    quiz: string;
+    title: string;
+    type: string;
+    question: string;
+    choices: Choice[];
+    edit: boolean;
+    correct: boolean;
+  }
 
 export default function QuizQuestion({
   question,

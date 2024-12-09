@@ -8,9 +8,9 @@ import QuizControlButtons from "./QuizControlButtons";
 import { CiSearch } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import * as coursesClient from "../client";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { deleteQuiz, setQuizzes } from "./reducer";
-import QuizGroupControlButtons from "./QuizGroupControlButtons";
-
+import { IoCaretDown } from "react-icons/io5";
 export default function Quizzes() {
   const { cid } = useParams();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -49,36 +49,36 @@ export default function Quizzes() {
           </div>
         </div>
         {currentUser.role === "FACULTY" && (
-          <div className="col-4">
-            <Link to={`/Kanbas/Courses/${cid}/Quizzes/@/Edit/Details`}>
-              <button
-                id="wd-add-quizzes"
-                className="btn btn-lg btn-danger me-1 float-end"
-              >
-                <FaPlus
-                  className="position-relative me-2"
-                  style={{ bottom: "1px" }}
-                />
-                Quiz
-              </button>
-            </Link>
-          </div>
-        )}
+    <div className="col-4 d-flex align-items-center justify-content-end">  
+        <Link to={`/Kanbas/Courses/${cid}/Quizzes/@/Edit/Details`}>
+            <button
+            id="wd-add-quizzes"
+            className="btn btn-lg btn-danger me-1"
+            >
+            <FaPlus
+            className="position-relative me-2"
+            style={{ bottom: "1px" }}
+            />
+            Quiz
+            </button>
+        </Link>
+        <div className="fs-5">
+            <BsThreeDotsVertical />
+        </div>
+    </div>
+    )}
       </div>
       <br />
       <br />
       <ul className="list-group rounded-0">
         <li className="list-group-item p-0 fs-5 border-gray">
-          <div className="wd-title p-3 ps-3 bg-secondary">
-            {currentUser.role === "FACULTY" && (
-              <BsGripVertical className="me-2 fs-3" />
-            )}
-            QUIZZES
-            <QuizGroupControlButtons />
+          <div className="wd-title p-3 ps-3 bg-white">
+            <IoCaretDown className="me-2 fs-3" />
+            Assignment Quizzes     
           </div>
         </li>
-        <ul id="wd-quizzes-list" className="list-group rounded-0">
-          {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") &&
+        <ul id="wd-quizzes-list" className="list-group rounded-0 wd-quiz">
+          {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN" || currentUser.role === "STUDENT") &&
             quizzes.map(
               (quiz: {
                 _id: string;
@@ -89,12 +89,12 @@ export default function Quizzes() {
                 dueDate: Date;
                 points: number;
                 questions: any[];
+                attempts: any[];
                 published: boolean;
               }) => (
                 <li className="wd-quiz-list-item list-group-item p-3 ps-1 fs-5">
                   <div className="row align-items-center">
                     <div className="col-1">
-                      <BsGripVertical className="me-2 fs-3" />
                       <RxRocket className="fs-5 text-success" />
                     </div>
                     <div className="col-9">
@@ -105,36 +105,9 @@ export default function Quizzes() {
                         {quiz.title}
                       </a>
                       <br />
-                      <span className="custom-gray1 fw-bold">
-                        {quiz.availableFrom &&
-                          new Date(quiz.availableFrom) > new Date() &&
-                          "Not available until"}
-                        {quiz.availableUntil &&
-                          new Date(quiz.availableUntil) < new Date() &&
-                          "Closed"}
-                        {quiz.availableFrom &&
-                          new Date(quiz.availableFrom) <= new Date() &&
-                          new Date(quiz.availableUntil) >= new Date() &&
-                          "Available since"}
-                        &nbsp;
-                      </span>
                       <span className="">
-                        <span className="custom-gray1">
-                          {quiz.availableFrom &&
-                            !(new Date(quiz.availableUntil) < new Date()) &&
-                            new Date(quiz.availableFrom).toLocaleDateString(
-                              "en-US",
-                              {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                              }
-                            )}
-                          &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span className="custom-gray1  fs-6">
+
                           <strong>Due</strong>&nbsp;
                           {quiz.dueDate &&
                             new Date(quiz.dueDate).toLocaleDateString("en-US", {
@@ -150,106 +123,27 @@ export default function Quizzes() {
                           pts&nbsp;&nbsp;|&nbsp;&nbsp; {quiz.questions.length}
                           &nbsp;Questions
                         </span>
-                      </span>
-                    </div>
-                    <div className="col-2">
-                      {cid && <QuizControlButtons quiz={quiz} cid={cid} />}
-                    </div>
-                  </div>
-                </li>
-              )
-            )}
-          {!(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") &&
-            quizzes.map(
-              (quiz: {
-                _id: string;
-                course: string;
-                points: number;
-                questions: any[];
-                published: boolean;
-                score: number;
-                title: string;
-                availableFrom: Date;
-                availableUntil: Date;
-                attempts: any[];
-                dueDate: Date;
-              }) => (
-                <li className="wd-quiz-list-item list-group-item p-3 ps-3 fs-5">
-                  <div className="row align-items-center">
-                    <div className="col-1 ms-2" style={{ width: "4%" }}>
-                      <RxRocket className="fs-5" />
-                    </div>
-                    <div className="col-11">
-                      <a
-                        className="wd-quiz-link text-decoration-none text-dark h5"
-                        href={`#/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`}
-                      >
-                        {quiz.title}
-                      </a>
-                      <br />
-                      <span className="custom-gray1 fw-bold">
-                        {quiz.availableFrom &&
-                          new Date(quiz.availableFrom) > new Date() &&
-                          "Not available until"}
-                        {quiz.availableUntil &&
-                          new Date(quiz.availableUntil) < new Date() &&
-                          "Closed"}
-                        {quiz.availableFrom &&
-                          new Date(quiz.availableFrom) <= new Date() &&
-                          new Date(quiz.availableUntil) >= new Date() &&
-                          "Available"}
-                        &nbsp;
-                      </span>
-                      <span className="">
-                        <span className="custom-gray1">
-                          {quiz.availableFrom &&
-                            !(new Date(quiz.availableUntil) < new Date()) &&
-                            new Date(quiz.availableFrom).toLocaleDateString(
-                              "en-US",
-                              {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                              }
-                            )}
-                          &nbsp;&nbsp;|&nbsp;&nbsp;
-                          <strong>Due</strong>&nbsp;
-                          {quiz.dueDate &&
-                            new Date(quiz.dueDate).toLocaleDateString("en-US", {
-                              weekday: "long",
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                              hour: "numeric",
-                              minute: "numeric",
-                              hour12: true,
-                            })}
-                          &nbsp;&nbsp;|&nbsp;&nbsp;{quiz.points}&nbsp;
-                          pts&nbsp;&nbsp;|&nbsp;&nbsp; {quiz.questions.length}
-                          &nbsp;Questions&nbsp;&nbsp;|&nbsp;&nbsp;
-                        </span>
-                        {/* {quiz.score && ( */}
                         {currentUser.role === "STUDENT" && (
-                          <span>
-                            Last attempt score:{" "}
+                          <span className="custom-gray1 fs-6">
+                            &nbsp;&nbsp;| &nbsp;&nbsp;Last attempt score:{" "}
                             {quiz.attempts.find((attempt) => {
                               console.log(attempt);
                               return attempt.user === currentUser._id;
                             })?.lastScore || "N/A"}
                           </span>
                         )}
-                        {/* )}
-                        {!quiz.score && <span>Last attempt score: N/A</span>} */}
                       </span>
                     </div>
+                    { currentUser.role !== "STUDENT" && (
+                    <div className="col-2">
+                      {cid && <QuizControlButtons quiz={quiz} cid={cid} />}
+                    </div>
+                    )}
                   </div>
                 </li>
               )
             )}
+          
         </ul>
       </ul>
     </div>
