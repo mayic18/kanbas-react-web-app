@@ -1,6 +1,6 @@
 import { IoEllipsisVertical } from "react-icons/io5";
 import { BsPlus } from "react-icons/bs";
-import ProtectedRouteRole from "../ProtectedRouteRole";
+import ProtectedRouteRole from "../ProtectedRoute/ProtectedRouteRole";
 
 export default function QuizGroupControlButtons() {
   return (

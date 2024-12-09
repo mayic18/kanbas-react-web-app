@@ -10,7 +10,7 @@ import { FaAlignJustify } from "react-icons/fa";
 import * as courseClient  from "./client";
 import { useEffect, useState } from "react";
 import QuizDetails from "./Quizzes/QuizDetail";
-import ProtectedRouteQuizEditor from "./ProtectedRouteQuizEditor";
+import ProtectedRouteQuizEditor from "./ProtectedRoute/ProtectedRouteQuizEditor";
 import QuizReview from "./Quizzes/QuizReview";
 import QuizEditor from "./Quizzes/QuizEditor";
 import QuizPreview from "./Quizzes/QuizPreview";

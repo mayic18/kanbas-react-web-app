@@ -41,21 +41,14 @@ export const incrementUserQuizAttempt = async (
   try {
     const response = await axiosWithCredentials.post(
       `${QUIZZES_API}/${quizId}/attempts`
-      // If the backend requires any data, pass it as the second argument
-      // For example: {}, if no data is needed
     );
-    return response.data; // Updated attempt count or confirmation
+    return response.data;
   } catch (error) {
     console.error("Error incrementing user quiz attempt:", error);
     throw error;
   }
 };
 
-/**
- * Fetch all attempts for a specific quiz.
- * @param {string} quizId - The ID of the quiz.
- * @returns {Promise<any[]>} - Array of attempt objects.
- */
 export const getAllAttemptsForQuiz = async (quizId: string) => {
   try {
     const response = await axiosWithCredentials.get(

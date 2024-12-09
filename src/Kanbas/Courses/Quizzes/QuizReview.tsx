@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateQuiz } from "./reducer";
-import ProtectedRouteRole from "../ProtectedRouteRole";
+import ProtectedRouteRole from "../ProtectedRoute/ProtectedRouteRole";
 import QuizQuestion from "./QuizQuestion";
 import { RiErrorWarningLine } from "react-icons/ri";
 import { FaPencil } from "react-icons/fa6";

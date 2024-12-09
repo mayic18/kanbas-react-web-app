@@ -158,7 +158,7 @@ const QuizDetails: React.FC = () => {
     if (!this_quiz.allowMultipleAttempts) {
       // If multipleAttempts is false, allow only one attempt
       if (userAttempts && userAttempts >= 1) {
-        alert("You have already attempted this quiz.");
+        alert("Quiz had been attended.");
         return;
       }
     } else {

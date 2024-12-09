@@ -1,7 +1,4 @@
 import {
-    Navigate,
-    Route,
-    Routes,
     useParams,
     useLocation,
     useNavigate,
@@ -10,7 +7,7 @@ import {
   import { useDispatch, useSelector } from "react-redux";
   import { addQuiz, updateQuiz } from "./reducer";
   import { useEffect, useState } from "react";
-  import ProtectedRouteRole from "../ProtectedRouteRole";
+  import ProtectedRouteRole from "../ProtectedRoute/ProtectedRouteRole";
   import { FaPlus } from "react-icons/fa";
   import QuestionEditor from "./QuestionEditor";
   import QuizDetailsEditor from "./QuizDetailsEditor";

@@ -3,7 +3,7 @@ import { FaCheckCircle, FaBan } from "react-icons/fa";
 
 import QuizEditor from "./QuizEditor"; // Replace ModuleEditor with QuizEditor
 import { useSelector } from "react-redux";
-import ProtectedRouteRole from "../ProtectedRouteRole";
+import ProtectedRouteRole from "../ProtectedRoute/ProtectedRouteRole";
 
 export default function QuizzesControls() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
