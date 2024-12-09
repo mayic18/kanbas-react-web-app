@@ -30,7 +30,6 @@ interface Quiz {
 interface User {
   _id: string;
   role: "STUDENT" | "FACULTY" | "ADMIN";
-  // Add other user properties as needed
 }
 
 interface Attempt {
@@ -41,7 +40,6 @@ interface Attempt {
   attemptCount: number;
   score: number;
   completedAt: string;
-  // Add other attempt properties as needed
 }
 
 interface RootState {
@@ -103,29 +101,40 @@ const QuizDetails: React.FC = () => {
 
   useEffect(() => {
     const fetchUserAttempts = async () => {
-      if (currentUser && currentUser._id && qid && cid) {
-        try {
-          // Fetch the number of attempts the user has made
-          const attemptData = await quizzesClient.getUserQuizAttempts(cid, qid);
-          console.log("Attempt Data:", attemptData);
+      // 检查条件是否满足，避免不必要的请求
+      if (!currentUser || !currentUser._id || !qid || !cid) {
+        setLoadingAttempts(false); // 条件不足时直接停止加载
+        return;
+      }
+  
+      try {
+        // 发起 API 请求获取用户尝试次数
+        const attemptData = await quizzesClient.getUserQuizAttempts(cid, qid);
+        console.log("Attempt Data:", attemptData);
+  
+        // 检查响应数据结构，确保 attemptCount 存在
+        if (attemptData && typeof attemptData.attemptCount === "number") {
           setUserAttempts(attemptData.attemptCount);
-        } catch (err: any) {
-          console.error("Error fetching user attempts:", err);
-          setError("Failed to fetch your quiz attempts.");
-        } finally {
-          setLoadingAttempts(false);
+        } else {
+          throw new Error("Invalid response structure");
         }
-      } else {
-        setLoadingAttempts(false);
+      } catch (err: any) {
+        console.error("Error fetching user attempts:", err);
+        setError("Failed to fetch your quiz attempts.");
+      } finally {
+        setLoadingAttempts(false); // 确保无论成功或失败都停止加载状态
       }
     };
+  
 
     const fetchLatestAttempt = async () => {
+        console.log("Requesting URL:", `/api/quizzes/${qid}/attempts/latest`);
       if (currentUser && currentUser._id && qid) {
         try {
           const latest = await quizzesClient.getLatestAttemptForQuiz(qid);
           console.log("Latest Attempt:", latest);
           setLatestAttempt(latest);
+          setLoadingAttempts(false); 
         } catch (err: any) {
           console.error("Error fetching latest attempt:", err);
           setLatestAttemptError("Failed to fetch the latest attempt.");
