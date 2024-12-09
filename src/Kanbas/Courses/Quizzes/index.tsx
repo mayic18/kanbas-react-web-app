@@ -11,6 +11,8 @@ import * as coursesClient from "../client";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { deleteQuiz, setQuizzes } from "./reducer";
 import { IoCaretDown } from "react-icons/io5";
+// changed
+
 export default function Quizzes() {
   const { cid } = useParams();
   const { currentUser } = useSelector((state: any) => state.accountReducer);

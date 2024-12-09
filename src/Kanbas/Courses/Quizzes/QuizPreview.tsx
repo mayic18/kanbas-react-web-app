@@ -1,7 +1,6 @@
 import { useParams, useNavigate, useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { updateQuiz } from "./reducer";
 import { useState } from "react";
 import ProtectedRouteRole from "../ProtectedRoute/ProtectedRouteRole";
 import QuizQuestion from "./QuizQuestion";
@@ -10,6 +9,9 @@ import { FaPencil } from "react-icons/fa6";
 import DOMPurify from "dompurify";
 import * as quizzesClient from "./client";
 import { FaQuestionCircle } from "react-icons/fa"
+// changed
+
+
 export default function QuizPreview() {
   const { cid, qid } = useParams();
   const { quizzes } = useSelector((state: any) => state.quizzesReducer);

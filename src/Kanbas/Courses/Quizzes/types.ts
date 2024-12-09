@@ -1,3 +1,4 @@
+// changed
 export interface Quiz {
     _id: string;
     title: string;
@@ -34,6 +35,7 @@ export interface Quiz {
     completedAt: string;
   }
   
+  
   export interface RootState {
     quizzesReducer: {
       quizzes: Quiz[];
@@ -42,7 +44,7 @@ export interface Quiz {
       currentUser: User | null;
     };
   }
-
+  
   export interface Choice {
     _id: string;
     question: string;
@@ -57,3 +59,49 @@ export interface Quiz {
     selected?: boolean;
   }
   
+  export interface Quizs {
+    score?: number;
+    _id: string;
+    lastAttempt?: any;
+    title: string;
+    description: string;
+    questions: QuizQuestion[]; 
+  }
+  
+  export interface QuizQuestion {
+    _id: string;
+    text: string;
+    points: number;
+    answers: QuizAnswerType[];
+    quiz: string;
+    title: string;
+    type: string;
+    question: string;
+    choices: Choice[];
+    edit: boolean;
+    correct: boolean;
+  }
+  
+  export interface AttemptQuestionType {
+    _id: string;
+    questionId: string;
+    selectedAnswerIds: string[]; // Array of selected answer IDs for the question
+  }
+
+  export interface Attempts {
+    lastAttempt: any;
+    _id: string;
+    quizId: string;
+    userId: string;
+    questions: AttemptQuestionType[];
+    score: number;
+    attemptDate: string;
+  }
+  export interface RootStates {
+    quizzesReducer: {
+      quizzes: Quizs[];
+    };
+    accountReducer: {
+      currentUser: User | null;
+    };
+  }

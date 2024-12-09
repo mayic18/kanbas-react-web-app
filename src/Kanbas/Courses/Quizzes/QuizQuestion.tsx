@@ -1,5 +1,3 @@
-import { FaPencil, FaPlus } from "react-icons/fa6";
-import { FaTrash } from "react-icons/fa";
 import DOMPurify from "isomorphic-dompurify";
 import { useState } from "react";
 import {Choice, QuizAnswerType} from "./types";

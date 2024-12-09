@@ -9,23 +9,8 @@ import { RiErrorWarningLine } from "react-icons/ri";
 import { FaPencil } from "react-icons/fa6";
 import DOMPurify from "dompurify";
 import * as quizzesClient from "./client"; // Ensure this includes getLatestAttemptForQuiz
-
-interface Quiz {
-  score?: number; // Made optional and of type number
-  lastAttempt?: any; // Made optional
-  _id: string;
-  title: string;
-  description: string;
-  questions: QuizQuestion[]; // Unified interface
-}
-
-interface Choice {
-  _id: string;
-  question: string;
-  correct: boolean;
-  answer: string;
-  selected: boolean;
-}
+import {Choice, Quizs, QuizAnswerType, Attempts, RootStates } from "./types";
+// changed
 
 interface QuizQuestion {
   _id: string;
@@ -41,51 +26,16 @@ interface QuizQuestion {
   correct: boolean;
 }
 
-interface QuizAnswerType {
-  _id: string;
-  text: string;
-  selected?: boolean;
-}
-
-interface User {
-  _id: string;
-  role: "STUDENT" | "FACULTY" | "ADMIN";
-}
-
-interface Attempt {
-  lastAttempt: any;
-  _id: string;
-  quizId: string;
-  userId: string;
-  questions: AttemptQuestionType[];
-  score: number;
-  attemptDate: string;
-}
-
-interface AttemptQuestionType {
-  _id: string;
-  questionId: string;
-  selectedAnswerIds: string[]; // Array of selected answer IDs for the question
-}
-
-interface RootState {
-  quizzesReducer: {
-    quizzes: Quiz[];
-  };
-  accountReducer: {
-    currentUser: User | null;
-  };
-}
 
 const QuizReview: React.FC = () => {
   const { cid, qid } = useParams<{ cid: string; qid: string }>();
   const { pathname } = useLocation();
-  const { quizzes } = useSelector((state: RootState) => state.quizzesReducer);
+  const { quizzes } = useSelector((state: RootStates) => state.quizzesReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Find the current quiz based on qid or initialize with default values
-  const initialQuiz: Quiz = quizzes.find((quiz) => quiz._id === qid) ?? {
+  const initialQuiz: Quizs = quizzes.find((quiz) => quiz._id === qid) ?? {
     _id: "",
     title: "",
     description: "",
@@ -94,10 +44,10 @@ const QuizReview: React.FC = () => {
     lastAttempt: undefined,
   };
 
-  const [quiz, setQuiz] = useState<Quiz>(initialQuiz);
+  const [quiz, setQuiz] = useState<Quizs>(initialQuiz);
 
   // State for the latest attempt
-  const [latestAttempt, setLatestAttempt] = useState<Attempt | null>(null);
+  const [latestAttempt, setLatestAttempt] = useState<Attempts | null>(null);
   const [loadingLatestAttempt, setLoadingLatestAttempt] =
     useState<boolean>(true);
   const [latestAttemptError, setLatestAttemptError] = useState<string | null>(
@@ -108,7 +58,7 @@ const QuizReview: React.FC = () => {
     const fetchLatestAttempt = async () => {
       if (qid) {
         try {
-          const attempt: Attempt = await quizzesClient.getLatestAttemptForQuiz(
+          const attempt: Attempts = await quizzesClient.getLatestAttemptForQuiz(
             qid
           );
           console.log("Latest Attempt:", attempt);
