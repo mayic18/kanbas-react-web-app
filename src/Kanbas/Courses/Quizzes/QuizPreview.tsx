@@ -38,7 +38,7 @@ export default function QuizPreview() {
   const save = async () => {
     if (!cid) {
       console.error("Course ID is undefined");
-      return; // Exit if cid is undefined
+      return;
     }
 
     let correctCount = 0;
@@ -126,33 +126,45 @@ export default function QuizPreview() {
           Cancel
         </button>
       </Link>
-      <ProtectedRouteRole>
-        <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit/Questions`}>
-          <button
-            id="wd-quiz-cancel"
-            className="btn btn-lg btn-secondary me-1 float-start"
-          >
-            <FaPencil className="me-2 mb_2" />
-            Keep Editing This Quiz
-          </button>
-        </Link>
-      </ProtectedRouteRole>
-      <h4>Questions</h4>
-      <div className="mt-2"style={{ display: "flex", flexDirection: "column", alignItems: "stretch" }}>
-        {quiz.questions.map((question: any, index: number) => (
-          <button
-            key={index}
-            id="wd-quiz_question"
-            className="text-danger border-0 bg-transparent py-2 px-3 d-flex align-items-center"
-            style={{
-              textAlign: "left",
-              fontWeight: "bold",
-            }}
-          >
-            <FaQuestionCircle className="me-2" />
-            Question {index + 1}
-          </button>
-        ))}
+      <div>
+        {/* Keep Editing This Quiz 按钮部分 */}
+        <div className="d-flex justify-content-start mb-3">
+          <ProtectedRouteRole>
+            <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit/Questions`}>
+              <button
+                id="wd-quiz-cancel"
+                className="btn btn-lg btn-secondary me-1"
+              >
+                <FaPencil className="me-2 mb_2" />
+                Keep Editing This Quiz
+              </button>
+            </Link>
+          </ProtectedRouteRole>
+        </div>
+
+        
+        <h4>Questions</h4>
+
+        
+        <div
+          className="mt-2"
+          style={{ display: "flex", flexDirection: "column", alignItems: "stretch" }}
+        >
+          {quiz.questions.map((question: any, index: number) => (
+            <button
+              key={index}
+              id="wd-quiz_question"
+              className="text-danger border-0 bg-transparent py-2 px-3 d-flex align-items-center"
+              style={{
+                textAlign: "left",
+                fontWeight: "bold",
+              }}
+            >
+              <FaQuestionCircle className="me-2" />
+              Question {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

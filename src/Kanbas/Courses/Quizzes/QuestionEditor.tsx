@@ -3,7 +3,6 @@ import { FaPencil, FaPlus } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import Editor from "react-simple-wysiwyg";
 import DOMPurify from "isomorphic-dompurify";
-
 interface Choice {
   _id: string;
   question: string;
