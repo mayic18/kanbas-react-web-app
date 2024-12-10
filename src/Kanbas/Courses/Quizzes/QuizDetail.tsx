@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as quizzesClient from "./client"; // Ensure this includes getLatestAttemptForQuiz
 import { FaPencil } from "react-icons/fa6";
 import {  Attempt, RootState} from "./types"
-//changeed
+//changed
 
 const QuizDetails: React.FC = () => {
   const { cid, qid } = useParams<{ cid: string; qid: string }>();
@@ -45,26 +45,19 @@ const QuizDetails: React.FC = () => {
   const [latestAttempt, setLatestAttempt] = useState<Attempt | null>(null);
   const [loadingLatestAttempt, setLoadingLatestAttempt] =
     useState<boolean>(true);
-  const [latestAttemptError, setLatestAttemptError] = useState<string | null>(
-    null
-  );
-
   const this_quiz = quizzes.find((quiz) => quiz._id === qid) || defaultQuiz;
 
   useEffect(() => {
     const fetchUserAttempts = async () => {
       if (currentUser && currentUser._id && qid && cid) {
         try {
-          // Fetch the number of attempts the user has made
           const attemptData = await quizzesClient.getUserQuizAttempts(cid, qid);
           console.log("Attempt Data:", attemptData);
           setUserAttempts(attemptData.attemptCount);
         } catch (err: any) {
           console.error("Error fetching user attempts:", err);
           setError("Failed to fetch your quiz attempts.");
-        } finally {
-          setLoadingAttempts(false);
-        }
+        } 
       } else {
         setLoadingAttempts(false);
       }
@@ -79,10 +72,8 @@ const QuizDetails: React.FC = () => {
           setLatestAttempt(latest);
         } catch (err: any) {
           console.error("Error fetching latest attempt:", err);
-          setLatestAttemptError("Failed to fetch the latest attempt.");
-        } finally {
-          setLoadingLatestAttempt(false);
-        }
+          setError("Failed to fetch the latest attempt.");
+        } 
       } else {
         setLoadingLatestAttempt(false);
       }
