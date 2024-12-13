@@ -6,11 +6,10 @@ import { updateQuiz } from "./reducer";
 import ProtectedRouteRole from "../ProtectedRoute/ProtectedRouteRole";
 import QuizQuestion from "./QuizQuestion";
 import { RiErrorWarningLine } from "react-icons/ri";
-import { FaPencil } from "react-icons/fa6";
 import DOMPurify from "dompurify";
 import * as quizzesClient from "./client"; // Ensure this includes getLatestAttemptForQuiz
 import {Choice, Quizs, QuizAnswerType, Attempts, RootStates } from "./types";
-// changed
+
 
 interface QuizQuestion {
   _id: string;
@@ -34,7 +33,6 @@ const QuizReview: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Find the current quiz based on qid or initialize with default values
   const initialQuiz: Quizs = quizzes.find((quiz) => quiz._id === qid) ?? {
     _id: "",
     title: "",
@@ -63,16 +61,12 @@ const QuizReview: React.FC = () => {
           );
           console.log("Latest Attempt:", attempt);
           setLatestAttempt(attempt);
-
-          // Merge attempt data with quiz questions to mark selected answers
           const updatedQuestions = quiz.questions.map((question) => {
-            // Find the corresponding question in the attempt
             const attemptQuestion = attempt.questions.find(
               (aq) => aq.questionId === question._id // Assuming questionId matches
             );
 
             if (attemptQuestion) {
-              // Map through the answers and set 'selected' to true if the answer was chosen
               const updatedAnswers = question.answers.map((answer) => ({
                 ...answer,
                 selected: attemptQuestion.selectedAnswerIds.includes(
@@ -86,7 +80,7 @@ const QuizReview: React.FC = () => {
               };
             }
 
-            return question; // No changes if the question wasn't attempted
+            return question;
           });
 
           setQuiz((prevQuiz) => ({
@@ -194,7 +188,6 @@ const QuizReview: React.FC = () => {
           Back
         </button>
       </Link>
-      {/* Display error message if fetching latest attempt failed */}
       {latestAttemptError && (
         <div className="text-danger mt-2">{latestAttemptError}</div>
       )}

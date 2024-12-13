@@ -90,13 +90,10 @@ const QuizDetails: React.FC = () => {
       alert("You must be logged in to attempt the quiz.");
       return;
     }
-
     if (!this_quiz) {
       alert("Quiz not found.");
       return;
     }
-
-    
     if (!this_quiz.allowMultipleAttempts) {
       if (userAttempts && userAttempts >= 1) {
         alert("Quiz had been attended.");
@@ -120,17 +117,16 @@ const QuizDetails: React.FC = () => {
     }
   };
 
-  if (!this_quiz) {
-    return <div>Loading quiz details...</div>;
-  }
 
   return (
     <div>
       {(currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN" || currentUser?.role === "STUDENT") && (
         <div>
+          {(currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN") && (
           <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Preview`}>
             <button className="btn btn-secondary me-2">Preview</button>
           </Link>
+          )}
           {(currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN") && (
           <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit/Details`}>
             <button className="btn btn-secondary">
@@ -142,7 +138,7 @@ const QuizDetails: React.FC = () => {
             <button
                 className="btn btn-danger ms-3"
                 onClick={handleBeginQuiz}
-                disabled={loadingAttempts}
+                // disabled={loadingAttempts}
               >
                 {"Begin"}
               </button>  
@@ -163,7 +159,7 @@ const QuizDetails: React.FC = () => {
             <label className="mt-2" htmlFor="wd-points">Points:</label>
         </div>
         <div className="col-md-8 mt-2">
-         {this_quiz.points !== undefined ? this_quiz.quizType : "100"}
+         {this_quiz.points !== undefined ? this_quiz.quizType : "15"}
         </div>
         
       </div>

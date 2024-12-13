@@ -127,7 +127,6 @@ export default function QuizPreview() {
         </button>
       </Link>
       <div>
-        {/* Keep Editing This Quiz 按钮部分 */}
         <div className="d-flex justify-content-start mb-3">
           <ProtectedRouteRole>
             <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit/Questions`}>

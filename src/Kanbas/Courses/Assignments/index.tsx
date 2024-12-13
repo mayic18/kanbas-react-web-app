@@ -31,7 +31,7 @@ export default function Assignments() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const isFaculty = currentUser?.role === "FACULTY";
+  const isNotStudent = currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
   const assignments = useSelector((state: RootState) =>
     state.assignmentReducer.assignments.filter((assignment: Assignment) => assignment.course === cid)
   );
@@ -69,7 +69,7 @@ export default function Assignments() {
             className="form-control"
           />
         </div>
-        {isFaculty && (
+        {isNotStudent && (
           <div>
             <button
               id="wd-add-assignment"
@@ -106,14 +106,14 @@ export default function Assignments() {
                   <p className="text-muted">
                     <span style={{ fontSize: '16px', color: 'red' }}>Multiple Modules |</span>
                     <span style={{ fontSize: '16px', color: 'black' }}>
-                      <b>Due</b> {assignment.dueDate} || Not available until {assignment.availableDate} | {assignment.points} pts
+                      <b>Due 12/04/2024</b> {assignment.dueDate} || Not available until  12/08/2024{assignment.availableDate} | {assignment.points} pts
                     </span>
 
                   </p>
                 </Link>
               </div>
               <FaCheckCircle className="text-success me-3" />
-              {isFaculty && (
+              {isNotStudent && (
                 <FaTrash className="text-danger me-2 mb-1" onClick={() => handleDelete(assignment._id)} />
               )}
               <HiDotsVertical className="float-end fs-2" />

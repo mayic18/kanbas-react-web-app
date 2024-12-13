@@ -3,30 +3,16 @@ import { FaPencil, FaPlus } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import Editor from "react-simple-wysiwyg";
 import DOMPurify from "isomorphic-dompurify";
-interface Choice {
-  _id: string;
-  question: string;
-  correct: boolean;
-  answer: string;
-}
-
-interface QuizQuestion {
-  _id: string;
-  quiz: string;
-  title: string;
-  type: string;
-  points: number;
-  question: string;
-  choices: Choice[];
-  edit: boolean;
-}
+import {QuestionChoice, QuizQuestionType} from "./types"
 
 export default function QuestionEditor({
   question,
   updateQuestion,
+  removeQuestion,
 }: {
-  question: QuizQuestion;
-  updateQuestion: (updatedQuestion: QuizQuestion) => void;
+  question: QuizQuestionType;
+  updateQuestion: (updatedQuestion: QuizQuestionType) => void;
+  removeQuestion: (questionId: string) => void;
 }) {
   const [currentQuestion, setQuestion] = useState(question);
   const [presaveQuestion, setPresaveQuestion] = useState(question);
@@ -60,28 +46,28 @@ export default function QuestionEditor({
   const addAnswer = () => {
     currentQuestion.choices
       ? setQuestion({
-          ...currentQuestion,
-          choices: [
-            ...currentQuestion.choices,
-            {
-              _id: new Date().getTime().toString() + "00000000000",
-              question: currentQuestion._id,
-              correct: false,
-              answer: "",
-            },
-          ],
-        })
+        ...currentQuestion,
+        choices: [
+          ...currentQuestion.choices,
+          {
+            _id: new Date().getTime().toString() + "00000000000",
+            question: currentQuestion._id,
+            correct: false,
+            answer: "",
+          },
+        ],
+      })
       : setQuestion({
-          ...currentQuestion,
-          choices: [
-            {
-              _id: new Date().getTime().toString() + "00000000000",
-              question: currentQuestion._id,
-              correct: false,
-              answer: "",
-            },
-          ],
-        });
+        ...currentQuestion,
+        choices: [
+          {
+            _id: new Date().getTime().toString() + "00000000000",
+            question: currentQuestion._id,
+            correct: false,
+            answer: "",
+          },
+        ],
+      });
   };
 
   return (
@@ -204,9 +190,8 @@ export default function QuestionEditor({
           currentQuestion.choices &&
           currentQuestion.choices.map((choice) => (
             <div
-              className={`border rounded mb-2 mt-2 p-2 ${
-                choice.correct && "fw-bolder text-success border-success"
-              }`}
+              className={`border rounded mb-2 mt-2 p-2 ${choice.correct && "fw-bolder text-success border-success"
+                }`}
             >
               {choice.answer}
             </div>
@@ -240,9 +225,8 @@ export default function QuestionEditor({
                           />
                           <label
                             htmlFor={`question-choice-${currentQuestion._id}-${choice._id}`}
-                            className={`ms-2 ${
-                              choice.correct && "text-success fw-bolder"
-                            }`}
+                            className={`ms-2 ${choice.correct && "text-success fw-bolder"
+                              }`}
                           >
                             {choice.correct
                               ? "Correct Answer"
@@ -312,9 +296,8 @@ export default function QuestionEditor({
                           />
                           <label
                             htmlFor={`question-choice-${currentQuestion._id}-${choice._id}`}
-                            className={`ms-2 ${
-                              choice.correct && "text-success fw-bolder"
-                            }`}
+                            className={`ms-2 ${choice.correct && "text-success fw-bolder"
+                              }`}
                           >
                             {choice.answer}
                           </label>
@@ -343,7 +326,11 @@ export default function QuestionEditor({
                                 ...currentQuestion,
                                 choices: currentQuestion.choices.map((c) =>
                                   c._id === choice._id
-                                    ? { ...c, answer: e.target.value }
+                                    ? {
+                                      ...c,
+                                      answer: e.target.value,
+                                      correct: true,
+                                    }
                                     : c
                                 ),
                               })
@@ -397,13 +384,22 @@ export default function QuestionEditor({
             </button>
           </div>
         ) : (
-          <button
-            className="btn btn-success me-1"
-            onClick={(e) => setQuestion({ ...currentQuestion, edit: true })}
-          >
-            <FaPencil className="position-relative me-2 mb-1" />
-            Edit
-          </button>
+          <div className="d-flex justify-content-between"> 
+            <button
+              className="btn btn-warning"
+              onClick={() => removeQuestion(currentQuestion._id)}
+            > 
+              Remove
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => setQuestion({ ...currentQuestion, edit: true })}
+            >
+              <FaPencil className="position-relative me-2 mb-1" />
+              Edit
+            </button>
+          </div>
+
         )}
       </form>
     </div>

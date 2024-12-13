@@ -63,7 +63,7 @@ export default function AssignmentEditor() {
     navigate(`/Kanbas/Courses/${cid}/Assignments`);
   };
 
-  const isFaculty = currentUser?.role === "FACULTY";
+  const isNotStudent = currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
 
   return (
     <div id="wd-assignments-editor">
@@ -76,7 +76,7 @@ export default function AssignmentEditor() {
           value={formData.title}
           onChange={handleChange}
           className="form-control"
-          readOnly={!isFaculty}
+          readOnly={!isNotStudent}
         />
       </div>
 
@@ -88,7 +88,7 @@ export default function AssignmentEditor() {
           value={formData.description}
           onChange={handleChange}
           className="form-control"
-          readOnly={!isFaculty}
+          readOnly={!isNotStudent}
         ></textarea>
       </div>
 
@@ -101,7 +101,7 @@ export default function AssignmentEditor() {
             value={formData.points}
             onChange={handleChange}
             className="form-control"
-            readOnly={!isFaculty}
+            readOnly={!isNotStudent}
           />
         </div>
       </div>
@@ -115,7 +115,7 @@ export default function AssignmentEditor() {
             value={formData.availableDate}
             onChange={handleChange}
             className="form-control"
-            readOnly={!isFaculty}
+            readOnly={!isNotStudent}
           />
         </div>
         <label htmlFor="dueDate" className="col-sm-2 form-label text-end">Due Date</label>
@@ -126,7 +126,7 @@ export default function AssignmentEditor() {
             value={formData.dueDate}
             onChange={handleChange}
             className="form-control"
-            readOnly={!isFaculty}
+            readOnly={!isNotStudent}
           />
         </div>
       </div>
@@ -140,16 +140,16 @@ export default function AssignmentEditor() {
             value={formData.availableUntil}
             onChange={handleChange}
             className="form-control"
-            readOnly={!isFaculty}
+            readOnly={!isNotStudent}
           />
         </div>
       </div>
 
       <div className="text-end">
-        {isFaculty && (
+        {isNotStudent && (
             <button onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments`)} className="btn btn-secondary me-3">Cancel</button>
         )}
-        {isFaculty && (
+        {isNotStudent && (
             <button onClick={handleSave} className="btn btn-danger">Save</button>
         )}    
       </div>

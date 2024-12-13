@@ -1,5 +1,4 @@
 import { FaPlus } from "react-icons/fa6";
-import { BsGripVertical } from "react-icons/bs";
 import { RxRocket } from "react-icons/rx";
 import { useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
@@ -53,13 +52,17 @@ export default function Quizzes() {
         {currentUser.role === "FACULTY" && (
     <div className="col-4 d-flex align-items-center justify-content-end">  
         <Link to={`/Kanbas/Courses/${cid}/Quizzes/@/Edit/Details`}>
-            <button
+        <button
             id="wd-add-quizzes"
             className="btn btn-lg btn-danger me-1"
-            >
+            style={{
+              backgroundColor: "#B22222",
+              borderColor: "#8B0000",
+            }}
+          >
             <FaPlus
-            className="position-relative me-2"
-            style={{ bottom: "1px" }}
+              className="position-relative me-1"
+              style={{ fontSize: "0.80em", bottom: "1px" }}
             />
             Quiz
             </button>
@@ -121,8 +124,8 @@ export default function Quizzes() {
                               minute: "numeric",
                               hour12: true,
                             })}
-                          &nbsp;&nbsp;|&nbsp;&nbsp;{quiz.points}&nbsp;
-                          pts&nbsp;&nbsp;|&nbsp;&nbsp; {quiz.questions.length}
+                          &nbsp;&nbsp;|&nbsp;&nbsp;{quiz.points}
+                          15 pts&nbsp;&nbsp;|&nbsp;&nbsp; {quiz.questions.length}
                           &nbsp;Questions
                         </span>
                         {currentUser.role === "STUDENT" && (
@@ -131,7 +134,7 @@ export default function Quizzes() {
                             {quiz.attempts.find((attempt) => {
                               console.log(attempt);
                               return attempt.user === currentUser._id;
-                            })?.lastScore || "N/A"}
+                            })?.lastScore || "15 pts"}
                           </span>
                         )}
                       </span>

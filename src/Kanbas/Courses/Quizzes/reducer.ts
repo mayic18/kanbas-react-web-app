@@ -13,15 +13,15 @@ const quizzesSlice = createSlice({
         q._id === quiz._id ? quiz : q
       ) as any;
     },
-    // Add a new quiz to the state
+    
     addQuiz: (state, { payload: quiz }) => {
       state.quizzes = [...state.quizzes, quiz] as any;
     },
-    // Delete a quiz from the state
+    
     deleteQuiz: (state, { payload: quiz }) => {
       state.quizzes = state.quizzes.filter((q: any) => q._id !== quiz._id);
     },
-    // Replace the entire quizzes state with a new array
+    
     setQuizzes: (state, { payload: quizzes }) => {
       state.quizzes = quizzes;
     },

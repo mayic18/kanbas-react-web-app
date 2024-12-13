@@ -1,4 +1,4 @@
-// changed
+
 export interface Quiz {
     _id: string;
     title: string;
@@ -104,4 +104,32 @@ export interface Quiz {
     accountReducer: {
       currentUser: User | null;
     };
+  }
+  export interface QuestionChoice {
+    _id: string;
+    question: string;
+    correct: boolean;
+    answer: string;
+  }
+  
+  export interface QuizQuestionType {
+    _id: string;
+    quiz: string;
+    title: string;
+    type: string;
+    points: number;
+    question: string;
+    choices: QuestionChoice[];
+    edit: boolean;
+  }
+
+  export interface QuizQuestionEditor {
+    _id: string;
+    quiz: string;
+    title: string;
+    type: string;
+    points: number;
+    question: string;
+    choices: QuestionChoice[];
+    edit: boolean;
   }

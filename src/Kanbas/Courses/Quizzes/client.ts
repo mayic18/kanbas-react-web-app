@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const QUIZZES_API = `${REMOTE_SERVER}/api/quizzes`;
 const ATTEMPTS_API = `${REMOTE_SERVER}/api/attempts`;
@@ -38,24 +37,20 @@ export const getAllAttemptsForQuiz = async (quizId: string) => {
     const response = await axiosWithCredentials.get(
       `${QUIZZES_API}/${quizId}/attempts`
     );
-    return response.data; // Array of attempt objects
+    return response.data; 
   } catch (error) {
     console.error("Error fetching all attempts for quiz:", error);
     throw error;
   }
 };
 
-/**
- * Fetch a specific attempt by its ID.
- * @param {string} attemptId - The ID of the attempt.
- * @returns {Promise<any>} - Attempt object.
- */
+
 export const getAttemptById = async (attemptId: string) => {
   try {
     const response = await axiosWithCredentials.get(
       `${ATTEMPTS_API}/${attemptId}`
     );
-    return response.data; // Attempt object
+    return response.data; 
   } catch (error) {
     console.error("Error fetching attempt by ID:", error);
     throw error;
@@ -73,7 +68,7 @@ export const createAttempt = async (
       `${QUIZZES_API}/${quizId}/attempts`,
       attemptData
     );
-    return response.data; // Newly created attempt
+    return response.data; 
   } catch (error) {
     console.error("Error creating new attempt:", error);
     throw error;
@@ -89,7 +84,7 @@ export const updateAttempt = async (
       `${ATTEMPTS_API}/${attemptId}`,
       attemptUpdates
     );
-    return response.data; // Updated attempt
+    return response.data; 
   } catch (error) {
     console.error("Error updating attempt:", error);
     throw error;
@@ -101,7 +96,7 @@ export const deleteAttempt = async (attemptId: string) => {
     const response = await axiosWithCredentials.delete(
       `${ATTEMPTS_API}/${attemptId}`
     );
-    return response.data; // Confirmation of deletion
+    return response.data; 
   } catch (error) {
     console.error("Error deleting attempt:", error);
     throw error;
@@ -113,7 +108,7 @@ export const getLatestAttemptForQuiz = async (quizId: string) => {
     const response = await axiosWithCredentials.get(
       `${QUIZZES_API}/${quizId}/attempts/latest`
     );
-    return response.data; // Latest attempt object
+    return response.data; 
   } catch (error) {
     console.error("Error fetching latest attempt for quiz:", error);
     throw error;

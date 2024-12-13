@@ -8,7 +8,7 @@ import {useParams,useLocation,useNavigate,} from "react-router";
   import QuestionEditor from "./QuestionEditor";
   import QuizDetailsEditor from "./QuizDetailsEditor";
   import * as coursesClient from "../client";
-  
+  import { QuizQuestionEditor } from "./types";
   export default function QuizEditor() {
     const { pathname } = useLocation();
     const { cid, qid } = useParams();
@@ -79,6 +79,13 @@ import {useParams,useLocation,useNavigate,} from "react-router";
         edit: false,
       };
       setQuiz({ ...quiz, questions: [...quiz.questions, newQuestion] });
+    };
+    const removeQuestion = (questionId: string) => {
+      const updatedQuestions = quiz.questions.filter((q: QuizQuestionEditor) => q._id !== questionId);
+      setQuiz({
+        ...quiz,
+        questions: updatedQuestions,
+      });
     };
     return (
       <ProtectedRouteRole>
@@ -152,8 +159,10 @@ import {useParams,useLocation,useNavigate,} from "react-router";
                         ),
                       });
                     }}
+                    removeQuestion={removeQuestion}
                   />
                 ))}
+                
               </div>
               <hr />
               <Link to={`/Kanbas/Courses/${cid}/Quizzes`}>
